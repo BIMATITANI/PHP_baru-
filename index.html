@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/assets/css/bulma.min.css">
+    <script type=text/javascript src="/assets/script/fontawesome-all.js"></script>
+    <title>Document</title>
+</head>
+<style>
+    .go_out {
+        animation: go_out;
+        animation-duration: 1s;
+        opacity: 0;
+    }
+
+    @keyframes go_out {
+        0% {
+            transform: scale(100%, 100%);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(0.7, 0.7);
+            opacity: 0;
+        }
+    }
+
+    .go_in {
+        animation: go_in;
+        animation-duration: 1s;
+        opacity: 1;
+    }
+
+    @keyframes go_in {
+        0% {
+            transform: scale(0.7, 0.7);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(100%, 100%);
+            opacity: 1;
+        }
+    }
+</style>
+
+<body>
+    <div class="container">
+        <div class="columns" style="margin-top: 1rem">
+            <div class="column"></div>
+            <div class="column">
+                <figure class="image" style="margin-left: auto; margin-right: auto; margin-bottom: 8vh">
+                    <img style="margin-left: auto; margin-right: auto; width: 25vh; height: auto; filter: drop-shadow(0 5px 15px #aaa)"
+                        src="/assets/image/logo_smk.png">
+                </figure>
+                <div class="box has-background-grey-lighter"
+                    style="padding-bottom: 0.1rem; filter: drop-shadow(0 5px 15px #aaa);">
+                    <h2 class="is-paddingless is-marginless subtitle has-text-centered"><strong>Login</strong></h2>
+                    <hr>
+                    <div class="container">
+                        <form autocomplete="off" action="./login/"
+                            method="post" id="login">
+                            <div class="field">
+                                <label class="label">NISN</label>
+                                <p class="control has-icons-left">
+                                    <input class="input" type="text" placeholder="6297525" name="nisn_login" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-address-card"></i>
+                                    </span>
+                                </p>
+                                <p class="help is-hidden">PESAN NISN LOGIN</p>
+                            </div>
+                            <div class="field">
+                                <label class="label">Kata Sandi</label>
+                                <p class="control has-icons-left">
+                                    <input class="input" type="password" placeholder="Password" name="password_login" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </p>
+                                <p class="help is-hidden">PESAN KATA SANDI LOGIN</p>
+                            </div>
+                            <br>
+                            <div class="field">
+                                <p class="control">
+                                    <div class="buttons is-right">
+                                        <button type="button" class="button is-medium is-warning" onclick="buka_register()">Registrasi</button>
+                                        <input type="submit" class="button is-medium is-info" value="Masuk">
+                                    </div>
+                                </p>
+                            </div>
+                        </form>
+                        <form style="position: absolute; width: 100%; display: none" autocomplete="off" action="./register/" method="post" id="register">
+                            <div class="field">
+                                <label class="label">NISN</label>
+                                <p class="control has-icons-left">
+                                    <input class="input" type="text" placeholder="6297525" name="nisn_register" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-address-card"></i>
+                                    </span>
+                                </p>
+                                <p class="help is-hidden">PESAN NISN REGISTER</p>
+                            </div>
+                            <div class="field">
+                                <label class="label">Kata Sandi</label>
+                                <p class="control has-icons-left">
+                                    <input class="input" type="password" placeholder="Password" name="password_register"required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </p>
+                                <p class="help is-hidden">PESAN PASSWORD REGISTER</p>
+                            </div>
+                            <div class="field">
+                                <label class="label">Ulangi Kata Sandi</label>
+                                <p class="control has-icons-left">
+                                    <input class="input" type="password" placeholder="Ulangi Password" name="comfirm_register" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </p>
+                                <p class="help is-hidden">PESAN CONFIRM PASSWORD REGISTER</p>
+                            </div>
+                            <br>
+                            <div class="field">
+                                <p class="control">
+                                    <div class="buttons is-right">
+                                        <button type="button" class="button is-medium is-warning" onclick="buka_login()">Masuk</button>
+                                        <input type="submit" class="button is-medium is-info" value="Registrasi">
+                                    </div>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="column"></div>
+        </div>
+    </div>
+    <footer>
+        <small style="color: #aaa; position: fixed; bottom: 0; left: 0;">Copyright © Bima Titani, <i>Et Al</i> -
+            2019</small>
+    </footer>
+    <script>
+        function buka_login(){
+            var login = document.getElementById("login");
+            var register = document.getElementById("register");
+
+            login.className = "go_in";
+            register.className = "go_out";
+
+            setTimeout(function(){
+                login.style.display = "";
+                login.style.position = "";
+                login.style.width = "";
+                register.style.position = "absolute";
+                register.style.width = "100%";
+                register.style.display = "none";
+            }, 500);
+
+            console.log(login.style);
+        }
+
+        function buka_register(){
+            var login = document.getElementById("login");
+            var register = document.getElementById("register");
+
+            login.className = "go_out";
+            register.className = "go_in";
+            
+            setTimeout(function(){
+                login.style.display = "none";
+                login.style.position = "absolute";
+                login.style.width = "100%";
+                register.style.position = "";
+                register.style.width = "";
+                register.style.display = "";
+            }, 500);
+            
+        }
+    </script>
+</body>
+
+</html>
