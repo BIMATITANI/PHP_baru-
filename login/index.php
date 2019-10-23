@@ -1,4 +1,5 @@
 <?php
+include_once "config.php";
 $name = $_POST["nisn_login"];
 $pass =  $_POST["password_login"];
 
