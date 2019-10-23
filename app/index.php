@@ -6,8 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="_assets/css/bulma.min.css">
-    <script type=text/javascript src="_assets/script/fontawesome-all.js"></script>
+    <link rel="stylesheet" href="../_assets/css/bulma.min.css">
+    <script type=text/javascript src="../_assets/script/fontawesome-all.js"></script>
     <title>Document</title>
 </head>
 
@@ -67,7 +67,13 @@ if(isset($_GET["page"])){                   //   - jika "register", maka tampila
 
 $login_status = NULL;                           // value hanya mungkin 0/false
 if(isset($_GET["login_status"])){               //  - jika value 0 maka login gagal
-    $login_status = "<h2 class='subtitle has-text-danger'>Login Gagal !</h2>";
+    if($_GET["login_status"] == "0"){           //  - jika value 1 maka registrasi berhasil
+        $login_status = "<h2 class='subtitle has-text-danger'>Login Gagal !</h2>";
+    } else if ($_GET["login_status"] == "1") {
+        $login_status = "<h2 class='subtitle has-text-success'>Registrasi Berhasil ! Silahkan Login !</h2>";
+    } else if ($_GET["login_status"] == "2") {
+        $login_status = "<h2 class='subtitle has-text-success'>Registrasi Gagal !</h2>";
+    }
 }
 
 $reg_nim = NULL;
@@ -76,7 +82,12 @@ if(isset($_GET["reg_nim"])){
     $reg_nim = "<p class=\"help is-danger\">NISN SUDAH TERDAFTAR !</p>";
 }
 if(isset($_GET["reg_password"])){
-    $reg_password = "<p class=\"help\">PASSWORD TIDAK SAMA !</p>";
+    $reg_password = "<p class=\"help is-danger\">PASSWORD TIDAK SAMA !</p>";
+}
+
+session_start();
+if(isset($_SESSION["nim"])){
+    header("Location: dashboard/");
 }
 ?>
 <body>
@@ -86,14 +97,18 @@ if(isset($_GET["reg_password"])){
             <div class="column">
                 <figure class="image" style="margin-left: auto; margin-right: auto; margin-bottom: 8vh">
                     <img style="margin-left: auto; margin-right: auto; width: 25vh; height: auto; filter: drop-shadow(0 5px 15px #aaa)"
-                        src="_assets/image/logo_smk.png">
+                        src="../_assets/image/logo_smk.png">
                 </figure>
                 <div class="box has-background-grey-lighter"
                     style="padding-bottom: 0.1rem; filter: drop-shadow(0 5px 15px #aaa);">
-                    <h2 class="is-paddingless is-marginless subtitle has-text-centered"><strong>Login</strong></h2>
+                    <h2 class="is-paddingless is-marginless subtitle has-text-centered"><strong id="form_title">Login</strong></h2>
+                    <p class="is-paddingless is-marginless subtitle has-text-centered">
+                        <?php echo $login_status; ?>
+                    </p>
                     <hr>
                     <div class="container">
-                        <form style="<?php echo $login_style; ?>" autocomplete="off" action="./login/" method="POST" id="login">
+                        <form autocomplete="off" style="<?php echo $login_style; ?>" action="./login/" method="POST" id="login">
+                            <input autocomplete="false" name="hidden" type="search" style="display:none;">
                             <div class="field">
                                 <label class="label">NIM</label>
                                 <p class="control has-icons-left">
@@ -122,7 +137,8 @@ if(isset($_GET["reg_password"])){
                                 </p>
                             </div>
                         </form>
-                        <form style="<?php echo $register_style; ?>" autocomplete="off" action="./register/" method="POST" id="register">
+                        <form autocomplete="off" style="<?php echo $register_style; ?>" action="./register/" method="POST" id="register">
+                            <input autocomplete="false" name="hidden" type="search" style="display:none;">
                             <div class="field">
                                 <label class="label">NIM</label>
                                 <p class="control has-icons-left">
@@ -132,6 +148,24 @@ if(isset($_GET["reg_password"])){
                                     </span>
                                 </p>
                                 <?php echo $reg_nim; ?>
+                            </div>
+                            <div class="field">
+                                <label class="label">Nama Lengkap</label>
+                                <p class="control has-icons-left">
+                                    <input class="input" type="text" placeholder="Nama Lengkap" name="nama_register" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-address-card"></i>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="field">
+                                <label class="label">Daerah Asal</label>
+                                <p class="control has-icons-left">
+                                    <input class="input" type="text" placeholder="Daerah Asal" name="daerah_register" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-address-card"></i>
+                                    </span>
+                                </p>
                             </div>
                             <div class="field">
                                 <label class="label">Kata Sandi</label>
@@ -146,7 +180,7 @@ if(isset($_GET["reg_password"])){
                             <div class="field">
                                 <label class="label">Ulangi Kata Sandi</label>
                                 <p class="control has-icons-left">
-                                    <input class="input" type="password" placeholder="Ulangi Password" name="comfirm_register" required>
+                                    <input class="input" type="password" placeholder="Ulangi Password" name="confirm_register" required>
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-lock"></i>
                                     </span>
@@ -177,9 +211,11 @@ if(isset($_GET["reg_password"])){
         function buka_login(){
             var login = document.getElementById("login");
             var register = document.getElementById("register");
+            var form_title = document.getElementById("form_title");
 
             login.className = "go_in";
             register.className = "go_out";
+            form_title.innerHTML="Login";
 
             setTimeout(function(){
                 login.style.display = "";
@@ -188,7 +224,7 @@ if(isset($_GET["reg_password"])){
                 register.style.position = "absolute";
                 register.style.width = "100%";
                 register.style.display = "none";
-            }, 500);
+            }, 250);
 
             console.log(login.style);
         }
@@ -199,6 +235,7 @@ if(isset($_GET["reg_password"])){
 
             login.className = "go_out";
             register.className = "go_in";
+            form_title.innerHTML="Daftar";
             
             setTimeout(function(){
                 login.style.display = "none";
@@ -207,7 +244,7 @@ if(isset($_GET["reg_password"])){
                 register.style.position = "";
                 register.style.width = "";
                 register.style.display = "";
-            }, 500);
+            }, 250);
             
         }
     </script>

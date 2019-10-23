@@ -27,7 +27,7 @@ class DataMahasiswa{
     function __construct($nim, $name, $asal)
     {
         $this->nim = $nim;
-        $this->name = $name;
+        $this->nama = $name;
         $this->asal = $asal;
     }
 
