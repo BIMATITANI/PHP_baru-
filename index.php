@@ -1,29 +1,26 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
-include_once"config.php"
 
 <head>
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="./assets/css/bulma.min.css">
-    <script type=text/javascript src="./assets/script/fontawesome-all.js"></script>
+    <link rel="stylesheet" href="_assets/css/bulma.min.css">
+    <script type=text/javascript src="_assets/script/fontawesome-all.js"></script>
     <title>Document</title>
 </head>
 
 <style>
     .go_out {
         animation: go_out;
-        animation-duration: 1s;
+        animation-duration: 0.5s;
         opacity: 0;
     }
 
     @keyframes go_out {
         0% {
-            transform: scale(100%, 100%);
+            transform: scale(1, 1);
             opacity: 1;
         }
 
@@ -35,7 +32,7 @@ include_once"config.php"
 
     .go_in {
         animation: go_in;
-        animation-duration: 1s;
+        animation-duration: 0.5s;
         opacity: 1;
     }
 
@@ -46,12 +43,42 @@ include_once"config.php"
         }
 
         100% {
-            transform: scale(100%, 100%);
+            transform: scale(1, 1);
             opacity: 1;
         }
     }
 </style>
 
+<?php
+$login_style = "";
+$register_style = "position: absolute; width: 100%; display: none";
+if(isset($_GET["page"])){                   //   - jika "register", maka tampilan akan form daftar
+    if($_GET["page"] == "login"){           //   - jika "login", maka tampilan akan form login
+        $login_style = "";
+        $register_style = "position: absolute; width: 100%; display: none";
+    } else if($_GET["page"] == "register") {
+        $login_style = "position: absolute; width: 100%; display: none";
+        $register_style = "";
+    } else {
+        $login_style = "";
+        $register_style = "position: absolute; width: 100%; display: none";
+    }
+}
+
+$login_status = NULL;                           // value hanya mungkin 0/false
+if(isset($_GET["login_status"])){               //  - jika value 0 maka login gagal
+    $login_status = "<h2 class='subtitle has-text-danger'>Login Gagal !</h2>";
+}
+
+$reg_nim = NULL;
+$reg_password = NULL;
+if(isset($_GET["reg_nim"])){
+    $reg_nim = "<p class=\"help is-danger\">NISN SUDAH TERDAFTAR !</p>";
+}
+if(isset($_GET["reg_password"])){
+    $reg_password = "<p class=\"help\">PASSWORD TIDAK SAMA !</p>";
+}
+?>
 <body>
     <div class="container">
         <div class="columns" style="margin-top: 1rem">
@@ -59,23 +86,22 @@ include_once"config.php"
             <div class="column">
                 <figure class="image" style="margin-left: auto; margin-right: auto; margin-bottom: 8vh">
                     <img style="margin-left: auto; margin-right: auto; width: 25vh; height: auto; filter: drop-shadow(0 5px 15px #aaa)"
-                        src="./assets/image/logo_smk.png">
+                        src="_assets/image/logo_smk.png">
                 </figure>
                 <div class="box has-background-grey-lighter"
                     style="padding-bottom: 0.1rem; filter: drop-shadow(0 5px 15px #aaa);">
                     <h2 class="is-paddingless is-marginless subtitle has-text-centered"><strong>Login</strong></h2>
                     <hr>
                     <div class="container">
-                        <form autocomplete="off" action="./login/" method="POST" id="login">
+                        <form style="<?php echo $login_style; ?>" autocomplete="off" action="./login/" method="POST" id="login">
                             <div class="field">
-                                <label class="label">NISN</label>
+                                <label class="label">NIM</label>
                                 <p class="control has-icons-left">
-                                    <input class="input" type="text" placeholder="NISN" name="nisn_login" required>
+                                    <input class="input" type="text" placeholder="NIM" name="nim_login" required>
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-address-card"></i>
                                     </span>
                                 </p>
-                                <p class="help is-hidden">PESAN NISN LOGIN</p>
                             </div>
                             <div class="field">
                                 <label class="label">Kata Sandi</label>
@@ -85,7 +111,6 @@ include_once"config.php"
                                         <i class="fas fa-lock"></i>
                                     </span>
                                 </p>
-                                <p class="help is-hidden">PESAN KATA SANDI LOGIN</p>
                             </div>
                             <br>
                             <div class="field">
@@ -97,16 +122,16 @@ include_once"config.php"
                                 </p>
                             </div>
                         </form>
-                        <form style="position: absolute; width: 100%; display: none" autocomplete="off" action="./register/" method="post" id="register">
+                        <form style="<?php echo $register_style; ?>" autocomplete="off" action="./register/" method="POST" id="register">
                             <div class="field">
-                                <label class="label">NISN</label>
+                                <label class="label">NIM</label>
                                 <p class="control has-icons-left">
-                                    <input class="input" type="text" placeholder="6297525" name="nisn_register" required>
+                                    <input class="input" type="text" placeholder="NIM" name="nim_register" required>
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-address-card"></i>
                                     </span>
                                 </p>
-                                <p class="help is-hidden">PESAN NISN REGISTER</p>
+                                <?php echo $reg_nim; ?>
                             </div>
                             <div class="field">
                                 <label class="label">Kata Sandi</label>
@@ -116,7 +141,7 @@ include_once"config.php"
                                         <i class="fas fa-lock"></i>
                                     </span>
                                 </p>
-                                <p class="help is-hidden">PESAN PASSWORD REGISTER</p>
+                                <?php echo $reg_password; ?>
                             </div>
                             <div class="field">
                                 <label class="label">Ulangi Kata Sandi</label>
@@ -126,7 +151,7 @@ include_once"config.php"
                                         <i class="fas fa-lock"></i>
                                     </span>
                                 </p>
-                                <p class="help is-hidden">PESAN CONFIRM PASSWORD REGISTER</p>
+                                <?php echo $reg_password; ?>
                             </div>
                             <br>
                             <div class="field">
